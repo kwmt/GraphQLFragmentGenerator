@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:graphqlgenerator/graphqlgenerator.dart';
+import 'package:graphqlgenerator/enum_has_value_generator.dart';
 
 void main() {
   test('adds one to input values', () {

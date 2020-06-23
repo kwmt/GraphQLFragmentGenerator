@@ -1,0 +1,14 @@
+targets:
+  $default:
+    builders:
+      graphql_generator|graphql_generator:
+        enabled: true
+
+builders:
+  graphql_generator:
+    import: "package:graphql_generator/graphql_generator.dart"
+    builder_factories: ["graphQLFragmentBuilder"]
+    build_extensions: {".dart": [".graphql.g.dart"]}
+    auto_apply: dependents
+    build_to: source
+    applies_builders: ["source_gen|combining_builder"]
