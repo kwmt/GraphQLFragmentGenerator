@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
-import 'package:code_builder/code_builder.dart';
 import 'package:graphql_annotation/graphql_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:source_gen/source_gen.dart';
@@ -11,33 +8,18 @@ import 'package:source_gen/source_gen.dart';
 class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
   final TypeChecker hasGraphQLFragment =
       TypeChecker.fromRuntime(GraphQLFragment);
-  final TypeChecker hasJsonSerializable =
-      TypeChecker.fromRuntime(JsonSerializable);
   final TypeChecker hasJsonKey = TypeChecker.fromRuntime(JsonKey);
 
-//  @override
-//  FutureOr<String> generate(LibraryReader library, BuildStep buildStep) {
-////    print("jsonKey: ${library.annotatedWithExact(hasJsonKey)}");
-////    print("hasGraphQLFragment: ${library.annotatedWith(hasGraphQLFragment)}");
-////    var lib = Library((b) => b
-////      ..body.addAll(library
-////          .annotatedWith(hasJsonKey)
-////          .map((element) => Code(_codeForEnum(element)))));
-////    final emitter = DartEmitter();
-////    return lib.accept(emitter).toString();
-//
-////    final lib = Library((b) => b..body.addAll(library.element..map((e) => Code(_codeForEnum(e)))));
-////    final emitter = DartEmitter();
-////    return lib.accept(emitter).toString();
-//  }
-//
-//  String _codeForEnum(AnnotatedElement element) {
-//    return element.annotation.read("name").stringValue;
-//  }
+  List<ClassElement> _graphQLFragmentFields = List();
+
+  String get _graphQLFragmentFieldsString =>
+      _graphQLFragmentFields.map((field) {
+        return "\$${_createFragment(field.name)}";
+      }).join("\n");
 
   @override
-  Future<String> generateForAnnotatedElement(
-      Element element, ConstantReader annotation, BuildStep buildStep) {
+  Iterable<String> generateForAnnotatedElement(
+      Element element, ConstantReader annotation, BuildStep buildStep) sync* {
     if (element is! ClassElement) {
       final name = element.name;
       throw InvalidGenerationSourceError('Generator cannot target `$name`.',
@@ -46,7 +28,6 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
     }
 
     final classElement = element as ClassElement;
-    print(classElement);
 
     var type = hasGraphQLFragment
         .firstAnnotationOfExact(classElement)
@@ -56,33 +37,97 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
     final elementInstanceFields =
         classElement.fields.where((e) => !e.isStatic).toList();
 
-    print(elementInstanceFields);
-//    elementInstanceFields[0].declaration.
-
-    List<DartObject> jsonKeyFields = elementInstanceFields
-        .map((e) => hasJsonKey.firstAnnotationOfExact(e))
-        .where((element) => element != null)
+    List<FieldObject> jsonKeyFields = elementInstanceFields
+        .map((e) {
+          final jsonKeyObject = hasJsonKey.firstAnnotationOfExact(e);
+          return FieldObject(jsonKeyObject, e);
+        })
+        .where((e) => e.dartObject != null)
         .toList();
 
-    //elementInstanceFields[0].context
+    _graphQLFragmentFields.clear();
+
+    yield _createGraphQLFragment(classElement, type, jsonKeyFields);
+  }
+
+  String _createGraphQLFragment(
+      ClassElement classElement, String type, List<FieldObject> jsonKeyFields) {
     StringBuffer buffer = StringBuffer();
 
-    var lowerCaseClassName = _lowerCaseFirstLetter(classElement.name);
-    var fragmentName = "${lowerCaseClassName}FragmentName";
+    final fragmentName = _createFragmentName(classElement.name);
 
     buffer.write('const String $fragmentName = \"${type}Field\";');
     buffer
-      ..write('const String ${lowerCaseClassName}Fragment = \"\"\"\n')
+      ..write("const String ${_createFragment(classElement.name)} = '''\n")
       ..write('fragment \$$fragmentName on $type {\n')
-      ..writeAll(jsonKeyFields.map((e) {
-        return '   ${e.getField('name').toStringValue()}\n';
-      }))
+      ..writeAll(jsonKeyFields.map((e) => _generateField(e)))
       ..write('}\n')
-      ..write('\"\"\";');
+      ..write(_graphQLFragmentFieldsString)
+      ..write(_graphQLFragmentFields.isEmpty ? '' : '\n')
+      ..write("''';");
 
-    return Future.value(buffer.toString());
+    return buffer.toString();
   }
+
+  /// ex) profile { ...$profileEntityFragmentName }
+  String _generateField(FieldObject fieldObject) {
+    final graphqlFragment = findGraphQlFragmentFields(fieldObject.classElement);
+
+    final onlyJsonKeyField =
+        fieldObject.dartObject.getField('name').toStringValue();
+
+    var graphqlFragmentString = "";
+    if (graphqlFragment != null) {
+      var fragmentName = _createFragmentName(graphqlFragment.name);
+      graphqlFragmentString = " { ...\$$fragmentName }";
+      _graphQLFragmentFields.add(graphqlFragment);
+    }
+
+    final field = "$onlyJsonKeyField$graphqlFragmentString";
+    return "   $field\n";
+  }
+
+  /// フィールドのメタデータに@GraphQLFragmentアノテーションが付与されている場合、そのメタデータ情報を取得する。
+  /// 付与されてなければ nullを返す。
+  ClassElement findGraphQlFragmentFields(ClassElement element) {
+    if (element == null) {
+      return null;
+    }
+    final graphQlFragmentElement = element.metadata.singleWhere(
+        (element) => element.element.enclosingElement.name == 'GraphQLFragment',
+        orElse: () => null);
+    // @GraphQLFragmentアノテーションが付与されていれば、その時のインスタンスフィールドを表示する。
+    if (graphQlFragmentElement != null) {
+      return element;
+    }
+    return null;
+  }
+
   String _lowerCaseFirstLetter(String word) {
     return '${word.substring(0, 1).toLowerCase()}${word.substring(1)}';
+  }
+
+  String _createFragmentName(String className) {
+    final lowerCaseClassName = _lowerCaseFirstLetter(className);
+    return "${lowerCaseClassName}FragmentName";
+  }
+
+  String _createFragment(String className) {
+    final lowerCaseClassName = _lowerCaseFirstLetter(className);
+    return "${lowerCaseClassName}Fragment";
+  }
+}
+
+class FieldObject {
+  final DartObject dartObject;
+  final FieldElement _element;
+
+  FieldObject(this.dartObject, this._element);
+
+  ClassElement get classElement {
+    if (_element != null && _element.type.element is ClassElement) {
+      return _element.type.element as ClassElement;
+    }
+    return null;
   }
 }
