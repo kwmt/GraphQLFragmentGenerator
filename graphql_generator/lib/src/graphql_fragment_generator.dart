@@ -10,7 +10,7 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
       TypeChecker.fromRuntime(GraphQLFragment);
   final TypeChecker hasJsonKey = TypeChecker.fromRuntime(JsonKey);
 
-  List<ClassElement> _graphQLFragmentFields = List();
+  Set<ClassElement> _graphQLFragmentFields = Set();
 
   String get _graphQLFragmentFieldsString =>
       _graphQLFragmentFields.map((field) {
@@ -80,6 +80,7 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
     if (graphqlFragment != null) {
       var fragmentName = _createFragmentName(graphqlFragment.name);
       graphqlFragmentString = " { ...\$$fragmentName }";
+      // FragmentNameではなくてFragmentそのものを保存しておく
       _graphQLFragmentFields.add(graphqlFragment);
     }
 
