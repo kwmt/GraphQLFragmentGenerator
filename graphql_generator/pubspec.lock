@@ -120,11 +120,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.11"
-  flutter:
-    dependency: "direct main"
-    description: flutter
-    source: sdk
-    version: "0.0.0"
   glob:
     dependency: transitive
     description:
@@ -135,9 +130,11 @@ packages:
   graphql_annotation:
     dependency: "direct main"
     description:
-      path: "../graphql_annotation"
-      relative: true
-    source: path
+      path: graphql_annotation
+      ref: HEAD
+      resolved-ref: "47af0f51d43fb40c4a4379229f58b3faac3efaae"
+      url: "https://github.com/kwmt/GraphQLFragmentGenerator.git"
+    source: git
     version: "0.0.1"
   html:
     dependency: transitive
@@ -237,11 +234,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.3"
-  sky_engine:
-    dependency: transitive
-    description: flutter
-    source: sdk
-    version: "0.0.99"
   source_gen:
     dependency: "direct main"
     description:
@@ -284,13 +276,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.6"
-  vector_math:
-    dependency: transitive
-    description:
-      name: vector_math
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.8"
   watcher:
     dependency: transitive
     description:
