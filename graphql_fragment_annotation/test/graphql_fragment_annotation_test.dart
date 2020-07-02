@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:graphql_annotation/graphql_fragment_annotation.dart';
+import 'package:graphql_fragment_annotation/graphql_fragment_annotation.dart';
 
 //void main() {
 //  test('adds one to input values', () {

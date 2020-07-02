@@ -10,14 +10,14 @@ environment:
 dependencies:
 #  flutter:
 #    sdk: flutter
-  graphql_annotation:
-    path: ../graphql_annotation
+  graphql_fragment_annotation:
+    path: ../graphql_fragment_annotation
   json_serializable: ^3.3.0
 
 dev_dependencies:
   build_runner: ^1.10.0
-  graphql_generator:
-    path: ../graphql_generator
+  graphql_fragment_generator:
+    path: ../graphql_fragment_generator
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
