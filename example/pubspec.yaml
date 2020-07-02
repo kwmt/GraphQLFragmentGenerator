@@ -10,8 +10,8 @@ environment:
 dependencies:
 #  flutter:
 #    sdk: flutter
-  graphql_fragment_annotation:
-    path: ../graphql_fragment_annotation
+  graphql_fragment_annotation: ^0.0.1
+
   json_serializable: ^3.3.0
 
 dev_dependencies:
