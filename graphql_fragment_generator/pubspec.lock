@@ -127,14 +127,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  graphql_annotation:
+  graphql_fragment_annotation:
     dependency: "direct main"
     description:
-      path: graphql_annotation
-      ref: HEAD
-      resolved-ref: "47af0f51d43fb40c4a4379229f58b3faac3efaae"
-      url: "https://github.com/kwmt/GraphQLFragmentGenerator.git"
-    source: git
+      name: graphql_fragment_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   html:
     dependency: transitive
