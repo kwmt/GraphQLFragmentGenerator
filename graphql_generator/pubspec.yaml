@@ -14,7 +14,7 @@ dependencies:
   code_builder: ^3.3.0
   analyzer: ^0.39.10
   graphql_annotation:
-    path: ../graphql_annotation
+    path: ../graphql_fragment_annotation
   json_annotation: 3.0.1
 
 dev_dependencies:

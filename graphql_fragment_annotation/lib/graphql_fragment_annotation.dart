@@ -1,4 +1,4 @@
-library graphql_annotation;
+library graphql_fragment_annotation;
 
 class GraphQLFragment {
   const GraphQLFragment({this.on});
