@@ -7,9 +7,10 @@ You can generate a fragment of GraphQL.
 Given a library timeline.dart with a Timeline class and user.dart   with a User class both annotated with @GraphQLFragment():
 
 ```
-import 'package:example/user.dart';
 import 'package:graphql_fragment_annotation/graphql_fragment_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'user.dart';
 
 part 'timeline.graphql.g.dart';
 
