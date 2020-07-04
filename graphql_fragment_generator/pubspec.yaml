@@ -15,5 +15,3 @@ dependencies:
   analyzer: ^0.39.10
   graphql_fragment_annotation: ^0.0.1
   json_annotation: 3.0.1
-
-dev_dependencies:

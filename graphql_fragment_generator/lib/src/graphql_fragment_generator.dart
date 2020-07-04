@@ -1,6 +1,8 @@
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
+import 'package:code_builder/code_builder.dart';
 import 'package:graphql_fragment_annotation/graphql_fragment_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:source_gen/source_gen.dart';
@@ -71,7 +73,14 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
 
   /// ex) profile { ...$profileEntityFragmentName }
   String _generateField(FieldObject fieldObject) {
-    final graphqlFragment = findGraphQlFragmentFields(fieldObject.classElement);
+    var classElement = fieldObject.classElement;
+
+    final iterableClassElement = findIterableField(fieldObject);
+    if (iterableClassElement != null) {
+      classElement = iterableClassElement;
+    }
+
+    final graphqlFragment = findGraphQlFragmentFields(classElement);
 
     final onlyJsonKeyField =
         fieldObject.dartObject.getField('name').toStringValue();
@@ -94,12 +103,26 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
     if (element == null) {
       return null;
     }
+
     final graphQlFragmentElement = element.metadata.singleWhere(
         (element) => element.element.enclosingElement.name == 'GraphQLFragment',
         orElse: () => null);
     // @GraphQLFragmentアノテーションが付与されていれば、その時のインスタンスフィールドを表示する。
     if (graphQlFragmentElement != null) {
       return element;
+    }
+    return null;
+  }
+
+  /// return [ClassElement] if element implements [Iterable] type. otherwise null
+  ClassElement findIterableField(FieldObject fieldObject) {
+    final iterableField = fieldObject.classElement.allSupertypes.singleWhere(
+        (element) => element.isDartCoreIterable,
+        orElse: () => null);
+
+    if (iterableField != null) {
+      final type = _getGenericTypes(fieldObject.fieldElement.type);
+      return type.element is ClassElement ? type.element as ClassElement : null;
     }
     return null;
   }
@@ -117,17 +140,21 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
     final lowerCaseClassName = _lowerCaseFirstLetter(className);
     return "${lowerCaseClassName}Fragment";
   }
+
+  DartType _getGenericTypes(DartType type) {
+    return type is ParameterizedType ? type.typeArguments.first : null;
+  }
 }
 
 class FieldObject {
   final DartObject dartObject;
-  final FieldElement _element;
+  final FieldElement fieldElement;
 
-  FieldObject(this.dartObject, this._element);
+  FieldObject(this.dartObject, this.fieldElement);
 
   ClassElement get classElement {
-    if (_element != null && _element.type.element is ClassElement) {
-      return _element.type.element as ClassElement;
+    if (fieldElement != null && fieldElement.type.element is ClassElement) {
+      return fieldElement.type.element as ClassElement;
     }
     return null;
   }
