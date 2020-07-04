@@ -1,8 +1,7 @@
 name: graphql_fragment_generator
-description: A new Flutter package.
-version: 0.0.1
-author:
-homepage:
+description: GraphQL Fragment Generator
+version: 0.0.1-alpha1
+homepage: https://github.com/kwmt/GraphQLFragmentGenerator/tree/master/graphql_fragment_generator
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
