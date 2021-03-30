@@ -1,6 +1,6 @@
 name: graphql_fragment_generator
 description: GraphQL Fragment Generator
-version: 0.0.1-alpha1
+version: 0.0.2
 homepage: https://github.com/kwmt/GraphQLFragmentGenerator/tree/master/graphql_fragment_generator
 
 environment:
@@ -11,11 +11,11 @@ dependencies:
   build_config: ^0.4.2
   source_gen: ^0.9.5
   code_builder: ^3.3.0
-  analyzer: ^0.39.10
-  graphql_fragment_annotation: ^0.0.1
-  json_annotation: ^3.0.1
+  analyzer: ^0.41.1
+  graphql_fragment_annotation: ^0.0.2
+  json_annotation: ^3.1.1
 
 dev_dependencies:
   test: ^1.15.1
   source_gen_test: ^0.1.1
-  path: ^1.7.0
+  path: ^1.8.0
