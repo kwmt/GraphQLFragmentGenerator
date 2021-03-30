@@ -33,8 +33,8 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
 
     var type = hasGraphQLFragment
         .firstAnnotationOfExact(classElement)
-        .getField("on")
-        .toStringValue();
+        ?.getField("on")
+        ?.toStringValue() ?? "";
 
     final elementInstanceFields =
         classElement.fields.where((e) => !e.isStatic).toList();
@@ -73,7 +73,7 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
 
   /// ex) profile { ...$profileEntityFragmentName }
   String _generateField(FieldObject fieldObject) {
-    var classElement = fieldObject.classElement;
+    ClassElement? classElement = fieldObject.classElement;
 
     final iterableClassElement = findIterableField(fieldObject);
     if (iterableClassElement != null) {
@@ -83,7 +83,7 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
     final graphqlFragment = findGraphQlFragmentFields(classElement);
 
     final onlyJsonKeyField =
-        fieldObject.dartObject.getField('name').toStringValue();
+        fieldObject.dartObject?.getField('name')?.toStringValue() ?? "";
 
     var graphqlFragmentString = "";
     if (graphqlFragment != null) {
@@ -99,7 +99,7 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
 
   /// フィールドのメタデータに@GraphQLFragmentアノテーションが付与されている場合、そのメタデータ情報を取得する。
   /// 付与されてなければ nullを返す。
-  ClassElement findGraphQlFragmentFields(ClassElement element) {
+  ClassElement? findGraphQlFragmentFields(ClassElement? element) {
     if (element == null) {
       return null;
     }
@@ -115,14 +115,14 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
   }
 
   /// return [ClassElement] if element implements [Iterable] type. otherwise null
-  ClassElement findIterableField(FieldObject fieldObject) {
-    final iterableField = fieldObject.classElement.allSupertypes.singleWhere(
+  ClassElement? findIterableField(FieldObject fieldObject) {
+    final iterableField = fieldObject.classElement?.allSupertypes?.singleWhere(
         (element) => element.isDartCoreIterable,
         orElse: () => null);
 
     if (iterableField != null) {
-      final type = _getGenericTypes(fieldObject.fieldElement.type);
-      return type.element is ClassElement ? type.element as ClassElement : null;
+      final type = _getGenericTypes(fieldObject.fieldElement?.type);
+      return type?.element is ClassElement ? type?.element as ClassElement : null;
     }
     return null;
   }
@@ -141,20 +141,20 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
     return "${lowerCaseClassName}Fragment";
   }
 
-  DartType _getGenericTypes(DartType type) {
+  DartType? _getGenericTypes(DartType? type) {
     return type is ParameterizedType ? type.typeArguments.first : null;
   }
 }
 
 class FieldObject {
-  final DartObject dartObject;
-  final FieldElement fieldElement;
+  final DartObject? dartObject;
+  final FieldElement? fieldElement;
 
   FieldObject(this.dartObject, this.fieldElement);
 
-  ClassElement get classElement {
-    if (fieldElement != null && fieldElement.type.element is ClassElement) {
-      return fieldElement.type.element as ClassElement;
+  ClassElement? get classElement {
+    if (fieldElement != null && fieldElement?.type?.element is ClassElement) {
+      return fieldElement?.type?.element as ClassElement;
     }
     return null;
   }
