@@ -3,6 +3,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:code_builder/code_builder.dart';
+import 'package:collection/collection.dart';
 import 'package:graphql_fragment_annotation/graphql_fragment_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:source_gen/source_gen.dart';
@@ -104,9 +105,8 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
       return null;
     }
 
-    final graphQlFragmentElement = element.metadata.singleWhere(
-        (element) => element.element.enclosingElement.name == 'GraphQLFragment',
-        orElse: () => null);
+    final graphQlFragmentElement = element.metadata.singleWhereOrNull(
+        (element) => element.element?.enclosingElement?.name == 'GraphQLFragment');
     // @GraphQLFragmentアノテーションが付与されていれば、その時のインスタンスフィールドを表示する。
     if (graphQlFragmentElement != null) {
       return element;
@@ -116,9 +116,8 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
 
   /// return [ClassElement] if element implements [Iterable] type. otherwise null
   ClassElement? findIterableField(FieldObject fieldObject) {
-    final iterableField = fieldObject.classElement?.allSupertypes?.singleWhere(
-        (element) => element.isDartCoreIterable,
-        orElse: () => null);
+    final iterableField = fieldObject.classElement?.allSupertypes.singleWhereOrNull(
+        (element) => element.isDartCoreIterable);
 
     if (iterableField != null) {
       final type = _getGenericTypes(fieldObject.fieldElement?.type);
@@ -153,8 +152,8 @@ class FieldObject {
   FieldObject(this.dartObject, this.fieldElement);
 
   ClassElement? get classElement {
-    if (fieldElement != null && fieldElement?.type?.element is ClassElement) {
-      return fieldElement?.type?.element as ClassElement;
+    if (fieldElement != null && fieldElement?.type.element is ClassElement) {
+      return fieldElement?.type.element as ClassElement;
     }
     return null;
   }

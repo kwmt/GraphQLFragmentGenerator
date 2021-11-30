@@ -14,6 +14,7 @@ dependencies:
   analyzer: ^2.3.0
   graphql_fragment_annotation: ^0.0.2
   json_annotation: ^4.1.0
+  collection: ^1.15.0
 
 dev_dependencies:
   test: ^1.15.1
