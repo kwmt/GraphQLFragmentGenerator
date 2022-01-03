@@ -1,5 +1,4 @@
 [![Build Check](https://github.com/kwmt/GraphQLFragmentGenerator/actions/workflows/build.yaml/badge.svg)](https://github.com/kwmt/GraphQLFragmentGenerator/actions/workflows/build.yaml)
-
 [![unit test](https://github.com/kwmt/GraphQLFragmentGenerator/actions/workflows/unit_test.yaml/badge.svg)](https://github.com/kwmt/GraphQLFragmentGenerator/actions/workflows/unit_test.yaml)
 
 ## Development
