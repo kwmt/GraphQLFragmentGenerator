@@ -61,7 +61,7 @@ class GraphQLFragmentGenerator extends GeneratorForAnnotation<GraphQLFragment> {
 
     buffer.write('const String $fragmentName = \"${type}Field\";');
     buffer
-      ..write("const String ${_createFragment(classElement.name)} = '''\n")
+      ..write("final String ${_createFragment(classElement.name)} = '''\n")
       ..write('fragment \$$fragmentName on $type {\n')
       ..writeAll(jsonKeyFields.map((e) => _generateField(e)))
       ..write('}\n')
