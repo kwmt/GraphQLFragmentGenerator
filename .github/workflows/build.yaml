@@ -17,7 +17,7 @@ jobs:
         with:
           channel: 'stable' # or: 'beta', 'dev' or 'master'
       - name: Check build
-      - run: |-
+        run: |-
           cd example
           flutter pub get
           flutter pub pub run build_runner build
