@@ -12,7 +12,7 @@ dependencies:
   source_gen: ^1.2.1
   code_builder: ^4.1.0
   analyzer: ^3.0.0
-  graphql_fragment_annotation: ^0.0.2
+  graphql_fragment_annotation: ^0.1.0
   json_annotation: ^4.4.0
   collection: ^1.15.0
 
