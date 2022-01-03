@@ -21,8 +21,8 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable' # or: 'beta', 'dev' or 'master'
-      - run: |
-        cd graphql_fragment_generator
-        flutter pub get
-        flutter pub pub run build_runner build
-        dart test
+      - run: |-
+          cd graphql_fragment_generator
+          flutter pub get
+          flutter pub pub run build_runner build
+          dart test
