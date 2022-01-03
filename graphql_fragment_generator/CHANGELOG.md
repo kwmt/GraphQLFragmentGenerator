@@ -1,3 +1,5 @@
+## [0.1.0+1]
+- update readme
 ## [0.1.0]
 - Require Dart SDK >=2.14.0.
 - Require `graphql_fragment_annotation` >=0.1.0.
