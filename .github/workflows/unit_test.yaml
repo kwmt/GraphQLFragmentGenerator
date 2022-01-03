@@ -24,5 +24,4 @@ jobs:
       - run: |-
           cd graphql_fragment_generator
           flutter pub get
-          flutter pub pub run build_runner build
           dart test
