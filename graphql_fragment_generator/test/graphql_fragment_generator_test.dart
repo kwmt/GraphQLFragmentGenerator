@@ -7,7 +7,7 @@ Future<void> main() async {
   initializeBuildLogTracking();
   final reader = await initializeLibraryReaderForDirectory(
     p.join('test', 'src'),
-    '_graphql_fragment_generator_test_input.dart',
+    'graphql_fragment_generator_test_input.dart',
   );
 
   testAnnotatedElements(
