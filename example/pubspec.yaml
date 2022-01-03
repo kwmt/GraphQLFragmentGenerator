@@ -1,6 +1,6 @@
 name: example
 description: A new Flutter package.
-version: 0.0.1
+version: 0.1.0
 author:
 homepage:
 
@@ -10,7 +10,7 @@ environment:
 dependencies:
 #  flutter:
 #    sdk: flutter
-  graphql_fragment_annotation: ^0.0.2
+  graphql_fragment_annotation: ^0.1.0
 
   json_serializable: ^6.1.3
 
