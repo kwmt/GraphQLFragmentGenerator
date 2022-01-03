@@ -50,7 +50,7 @@ Building creates the corresponding part `timeline.graphql.g.dart` and `user.grap
 part of 'timeline.dart';
 
 const String timelineFragmentName = "timelineField";
-const String timelineFragment = '''
+final String timelineFragment = '''
 fragment $timelineFragmentName on timeline {
    id
    content
@@ -64,7 +64,7 @@ $userFragment
 part of 'user.dart';
 
 const String userFragmentName = "userField";
-const String userFragment = '''
+final String userFragment = '''
 fragment $userFragmentName on user {
    id
    name
