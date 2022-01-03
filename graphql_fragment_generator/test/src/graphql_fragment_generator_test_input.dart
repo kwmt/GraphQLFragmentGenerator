@@ -4,7 +4,7 @@ import 'package:source_gen_test/source_gen_test.dart';
 
 @ShouldGenerate(r"""
 const String testClass1FragmentName = "testClass1Field";
-const String testClass1Fragment = '''
+final String testClass1Fragment = '''
 fragment $testClass1FragmentName on testClass1 {
    h
 }
@@ -27,7 +27,7 @@ class TestClass1 {
 
 @ShouldGenerate(r"""
 const String testClass21FragmentName = "testClass21Field";
-const String testClass21Fragment = '''
+final String testClass21Fragment = '''
 fragment $testClass21FragmentName on testClass21 {
    id
    testClass22 { ...$testClass22FragmentName }
@@ -51,7 +51,7 @@ class TestClass21 {
 
 @ShouldGenerate(r"""
 const String testClass22FragmentName = "testClass22Field";
-const String testClass22Fragment = '''
+final String testClass22Fragment = '''
 fragment $testClass22FragmentName on testClass22 {
    id
 }
