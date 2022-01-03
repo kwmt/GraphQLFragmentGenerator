@@ -1,7 +1,7 @@
 name: graphql_fragment_annotation
 description: A annotation for graphql_fragment_generator.
-version: 0.0.2
+version: 0.1.0
 homepage: https://github.com/kwmt/GraphQLFragmentGenerator/tree/master/graphql_fragment_annotation
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
