@@ -16,11 +16,11 @@ part 'timeline.graphql.g.dart';
 
 @GraphQLFragment(on: "timeline")
 class Timeline {
-  @JsonKey(name: 'id', nullable: false)
+  @JsonKey(name: 'id')
   final String id;
-  @JsonKey(name: 'content', nullable: false)
+  @JsonKey(name: 'content')
   final String name;
-  @JsonKey(name: 'user', nullable: true)
+  @JsonKey(name: 'user')
   final User user;
 
   Timeline(this.id, this.name, this.user);
@@ -35,9 +35,9 @@ part 'user.graphql.g.dart';
 
 @GraphQLFragment(on: 'user')
 class User {
-  @JsonKey(name: 'id', nullable: false)
+  @JsonKey(name: 'id')
   final String id;
-  @JsonKey(name: 'name', nullable: false)
+  @JsonKey(name: 'name')
   final String name;
 
   User(this.id, this.name);
